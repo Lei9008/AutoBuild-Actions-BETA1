@@ -19,7 +19,7 @@ on:
   
   ## 重新点亮 Star 时触发编译(不要删除此行注释)
   #watch:
-  #  types: [started]
+    types: [started]
   
   ### 界面控制部分 ( 以下内容请保持不变, 如有需要仅修改 options 选项 )
   workflow_dispatch:
