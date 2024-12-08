@@ -90,10 +90,21 @@ then
 	echo '[ -n "\$(command -v ip6tables)" ] && ip6tables -t mangle -A PREROUTING -i pppoe -p tcp -m tcp --tcp-flags PSH,FIN PSH,FIN -j DROP' >> /etc/firewall.user
 	echo '[ -n "\$(command -v ip6tables)" ] && ip6tables -t mangle -A PREROUTING -i pppoe -p ipv6-icmp --icmpv6-type destination-unreachable -j DROP' >> /etc/firewall.user
 	echo '[ -n "\$(command -v ip6tables)" ] && ip6tables -t mangle -A PREROUTING -i pppoe -p tcp -m tcp --tcp-flags ACK,RST RST -j DROP' >> /etc/firewall.user
+       
+	echo "CONFIG_PACKAGE_fros=y" >>.config
+        echo "CONFIG_PACKAGE_fros_files=y" >>.config
+        echo "CONFIG_PACKAGE_luci-app-fros=y" >>.config
+        make defconfig
 fi
 exit 0
 EOF
-		# sed -i "s?/bin/login?/usr/libexec/login.sh?g" ${FEEDS_PKG}/ttyd/files/ttyd.config
+		sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+                sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
+                git pull
+                ./scripts/feeds update -a
+                ./scripts/feeds install -a
+		
+                # sed -i "s?/bin/login?/usr/libexec/login.sh?g" ${FEEDS_PKG}/ttyd/files/ttyd.config
 		# sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
 		# sed -i '/uci commit luci/i\uci set luci.main.mediaurlbase="/luci-static/argon-mod"' $(PKG_Finder d package default-settings)/files/zzz-default-settings
 		#sed -i "s?openwrt-23.05?master?g" ${FEEDS_CONF}
