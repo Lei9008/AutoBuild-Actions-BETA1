@@ -4,7 +4,7 @@
 #   Author: Hyy2001X                                      #
 ###########################################################
 
-name: NEWIFI D2
+name: NeWiFi D2
 
 on:
   repository_dispatch:
