@@ -1,6 +1,6 @@
 
 config system
-	option hostname 'NEWIFI3'
+	option hostname 'NeWiFi-D2'
 	option ttylogin '0'
 	option log_size '128'
 	option log_file '/tmp/system.log'
@@ -27,7 +27,7 @@ config led
 
 config led
 	option default '0'
-	option name 'WIFI-2.4GHz'
+	option name 'WIFI'
 	option sysfs 'blue:wlan2g'
 	option trigger 'netdev'
 	option dev 'wlan0'
