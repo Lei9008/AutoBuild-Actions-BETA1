@@ -27,7 +27,7 @@ config led
 
 config led
 	option default '0'
-	option name 'WIFI'
+	option name 'WIFI-2.4GHz'
 	option sysfs 'blue:wlan2g'
 	option trigger 'netdev'
 	option dev 'wlan0'
