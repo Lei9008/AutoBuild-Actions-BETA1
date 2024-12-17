@@ -85,7 +85,7 @@ jobs:
 
     steps:
 
-    - name: 优化磁盘空间"Optimize disk space"
+    - name: 优化磁盘空间 (Optimize disk space)
       if: env.DELETE_USELESS_FILES == 'true' && !cancelled()
       uses: "hugoalh/disk-space-optimizer-ghaction@v0.8.0"
       with:
@@ -107,7 +107,7 @@ jobs:
         npm_clean: "True"
         os_swap: "True"
 
-    - name: 释放磁盘空间(Free up disk space)
+    - name: 释放磁盘空间 (Free up disk space)
       if: env.DELETE_USELESS_FILES == 'true' && !cancelled()
       uses: easimon/maximize-build-space@master
       with: 
@@ -119,7 +119,7 @@ jobs:
         remove-codeql: 'true'
         remove-docker-images: 'true'
 
-    - name: 检出(Checkout)
+    - name: 检出 (Checkout)
       uses: actions/checkout@main
       with:
         fetch-depth: 0
@@ -142,7 +142,7 @@ jobs:
          echo "硬盘详情："
          df -Th
          
-    - name: 加载自定义源(Load Custom Variables)
+    - name: 加载自定义源 (Load Custom Variables)
       run: |
         if [ -n "${{ github.event.inputs.Tempoary_CONFIG }}" ]
         then
@@ -187,7 +187,7 @@ jobs:
             echo "UPLOAD_BIN_ARTIFACTS=${{ github.event.inputs.UPLOAD_BIN_ARTIFACTS }}" >> $GITHUB_ENV
         fi
 
-    - name: 定时触发器(TIMED_TRIGGER)
+    - name: 定时触发器 (TIMED_TRIGGER)
       if: env.TIMED_TRIGGER == 'true'
       env:
         UPLOAD_RELEASES: true
@@ -198,7 +198,7 @@ jobs:
         echo "UPLOAD_ARTIFACTS=${UPLOAD_ARTIFACTS}" >> $GITHUB_ENV
         echo "UPLOAD_BIN_ARTIFACTS=${UPLOAD_BIN_ARTIFACTS}" >> $GITHUB_ENV
 
-    - name: 初始化环境(Initialize Environment)
+    - name: 初始化环境 (Initialize Environment)
       env:
         DEBIAN_FRONTEND: noninteractive
       run: |
@@ -219,7 +219,7 @@ jobs:
         ./scripts/feeds update -a
         ./scripts/feeds install -a
 
-    - name: 提速(Accelerate)
+    - name: 提速 (Accelerate)
       if: env.CACHE_ACCELERATE == 'true'
       uses: klever1988/cachewrtbuild@main
       with:
@@ -229,7 +229,7 @@ jobs:
         clean: true
         prefix: ${{ github.workspace }}/openwrt
 
-    - name: 运行DIY(Run Diy Scripts)
+    - name: 运行DIY (Run Diy Scripts)
       run: |
         echo "Free space:"
         df -h
@@ -249,42 +249,42 @@ jobs:
         Firmware_Diy
         Firmware_Diy_Other
 
-    - name: 预下载库(Pre-download Libraries)
+    - name: 预下载库 (Pre-download Libraries)
       run: |
         cd openwrt
         ./scripts/feeds install -a
         make defconfig
         make download -j8
 
-    - name: 构建OpenWrt(Build OpenWrt)
+    - name: 构建OpenWrt (Build OpenWrt)
       id: compile
       run: |
         cd openwrt
         make -j4 || make -j1 V=s
         [ "$?" == 0 ] && echo "Compile_Result=true" >> $GITHUB_ENV || echo "Compile_Result=false" >> $GITHUB_ENV
 
-    - name: 检查固件(Checkout Firmware)
+    - name: 检查固件 (Checkout Firmware)
       if: steps.compile.outcome == 'success' && !cancelled()
       run: |
         cd openwrt
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh
         Firmware_Diy_End
 
-    - name: 上传固件到Artifacts(Upload Firmware to Artifacts)
+    - name: 上传固件到Artifacts (Upload Firmware to Artifacts)
       uses: actions/upload-artifact@main
       if: env.UPLOAD_ARTIFACTS == 'true' && steps.compile.outcome == 'success' && !cancelled()
       with:
         name: ${{ env.CONFIG_FILE }}_firmware_${{ env.Compile_Date }}
         path: openwrt/bin/Firmware
 
-    - name: 上传Bin到Artifacts(Upload bin to Artifacts）
+    - name: 上传Bin到Artifacts (Upload bin to Artifacts）
       uses: actions/upload-artifact@main
       if: env.UPLOAD_BIN_ARTIFACTS == 'true' && steps.compile.outcome == 'success' && !cancelled()
       with:
         name: ${{ env.CONFIG_FILE }}_bin_${{ env.Compile_Date }}
         path: openwrt/bin
 
-    - name: 发布固件(Upload Firmware to Release）
+    - name: 上传固件到Release (Upload Firmware to Release）
       uses: svenstaro/upload-release-action@v2
       if: env.UPLOAD_RELEASES == 'true' && steps.compile.outcome == 'success' && !cancelled()
       with:
@@ -294,12 +294,12 @@ jobs:
         tag: AutoUpdate
         overwrite: true
         
-    - name: 刷新API(1/2)Refresh API (1/2)
+    - name: 刷新API(1/2) Refresh API (1/2)
       if: env.UPLOAD_RELEASES == 'true' && steps.compile.outcome == 'success' && !cancelled()
       run: |
         wget https://api.github.com/repos/${{github.repository}}/releases/tags/AutoUpdate -O API
         
-    - name: 刷新API(2/2)Refresh API (2/2)
+    - name: 刷新API(2/2) Refresh API (2/2)
       if: env.UPLOAD_RELEASES == 'true' && steps.compile.outcome == 'success' && !cancelled()
       uses: svenstaro/upload-release-action@v2
       with:
@@ -309,7 +309,7 @@ jobs:
         tag: AutoUpdate
         overwrite: true
 
-    - name: 删除旧的工作流(Delete old Workflow Runs)
+    - name: 删除旧的工作流 (Delete old Workflow Runs)
       continue-on-error: true
       if: env.DELETE_OLD_WORKFLOW == 'true' && !cancelled()
       uses: Mattraks/delete-workflow-runs@v2
