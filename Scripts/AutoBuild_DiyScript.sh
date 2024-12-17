@@ -96,6 +96,7 @@ then
 	echo "CONFIG_PACKAGE_fros=y" >>.config
         echo "CONFIG_PACKAGE_fros_files=y" >>.config
         echo "CONFIG_PACKAGE_luci-app-fros=y" >>.config
+	make defconfig
         
 fi
 exit 0
