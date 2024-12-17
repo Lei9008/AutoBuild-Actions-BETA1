@@ -94,15 +94,15 @@ then
 	echo "CONFIG_PACKAGE_fros=y" >>.config
         echo "CONFIG_PACKAGE_fros_files=y" >>.config
         echo "CONFIG_PACKAGE_luci-app-fros=y" >>.config
-        make defconfig
+        
 fi
 exit 0
 EOF
-		sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+		#添加的插件源
+                sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
+                sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
                 sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
-                git pull
-                ./scripts/feeds update -a
-                ./scripts/feeds install -a
+                sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
 		
                 # sed -i "s?/bin/login?/usr/libexec/login.sh?g" ${FEEDS_PKG}/ttyd/files/ttyd.config
 		# sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
