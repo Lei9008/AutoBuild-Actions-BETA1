@@ -121,7 +121,7 @@ EOF
                 git pull
                 ./scripts/feeds update -a
                 ./scripts/feeds install -a
-                make menuconfig
+               # make menuconfig
  
   
                 # sed -i "s?/bin/login?/usr/libexec/login.sh?g" ${FEEDS_PKG}/ttyd/files/ttyd.config
