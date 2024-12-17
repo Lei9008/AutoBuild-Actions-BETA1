@@ -74,22 +74,7 @@ Firmware_Diy() {
 	# Copy <cp_from> <cp_to > <rename>
 	# merge_package <git_branch> <git_repo_url> <package_path> <target_path>..
 
-        #添加的插件源
-        sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
-        sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
-        sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
-        sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
- 
-        #web登陆密码从空密码修改为 password
-        sed -i 's/root:::0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.::0:99999:7:::/g' package/base-files/files/etc/shadow
-
-        #修改主机名
-        sed -i "s/hostname='OpenWrt'/hostname='NeWiFi'/g" package/base-files/files/bin/config_generate
-
-        #更换lede源码中自带argon主题
-        rm -rf feeds/luci/themes/luci-theme-argon && git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon
-        [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/themes/luci-theme-design feeds/luci/applications/luci-app-design-config && git_svn main https://github.com/fichenx/packages luci-theme-design luci-app-design-config
-
+       
  
 	case "${OP_AUTHOR}/${OP_REPO}:${OP_BRANCH}" in
 	coolsnowwolf/lede:master)
@@ -116,7 +101,23 @@ fi
 exit 0
 EOF
 		
-		
+       #添加的插件源
+        sed -i '$a src-git lienol https://github.com/Lienol/openwrt-package' feeds.conf.default
+        sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+        sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
+        sed -i '$a src-git smpackage https://github.com/kenzok8/small-package' feeds.conf.default
+ 
+        #web登陆密码从空密码修改为 password
+        sed -i 's/root:::0:99999:7:::/root:$1$V4UetPzk$CYXluq4wUazHjmCDBCqXF.::0:99999:7:::/g' package/base-files/files/etc/shadow
+
+        #修改主机名
+        sed -i "s/hostname='OpenWrt'/hostname='NeWiFi'/g" package/base-files/files/bin/config_generate
+
+        #更换lede源码中自带argon主题
+        rm -rf feeds/luci/themes/luci-theme-argon && git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git feeds/luci/themes/luci-theme-argon
+        [ -e package/lean/default-settings/files/zzz-default-settings ] && rm -rf feeds/luci/themes/luci-theme-design feeds/luci/applications/luci-app-design-config && git_svn main https://github.com/fichenx/packages luci-theme-design luci-app-design-config
+
+  
                 # sed -i "s?/bin/login?/usr/libexec/login.sh?g" ${FEEDS_PKG}/ttyd/files/ttyd.config
 		# sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
 		# sed -i '/uci commit luci/i\uci set luci.main.mediaurlbase="/luci-static/argon-mod"' $(PKG_Finder d package default-settings)/files/zzz-default-settings
