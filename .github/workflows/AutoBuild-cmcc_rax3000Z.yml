@@ -219,34 +219,34 @@ jobs:
         make defconfig
         make download -j8
 
-    - name: Build OpenWrt
+    - name: 构建OpenWrt (Build OpenWrt)
       run: |
         cd openwrt
         make -j4 || make -j1 V=s
         [ "$?" == 0 ] && echo "Compile_Result=true" >> $GITHUB_ENV || echo "Compile_Result=false" >> $GITHUB_ENV
 
-    - name: Checkout Firmware
+    - name: 检查固件 (Checkout Firmware)
       if: env.Compile_Result == 'true' && !cancelled()
       run: |
         cd openwrt
         source $GITHUB_WORKSPACE/Scripts/AutoBuild_Function.sh
         Firmware_Diy_End
 
-    - name: Upload Firmware to Artifacts
+    - name: 上传固件到Artifacts (Upload Firmware to Artifacts)
       uses: actions/upload-artifact@main
       if: env.UPLOAD_ARTIFACTS == 'true' && env.Compile_Result == 'true' && !cancelled()
       with:
         name: ${{ env.CONFIG_FILE }}_firmware_${{ env.Compile_Date }}
         path: openwrt/bin/Firmware
 
-    - name: Upload bin to Artifacts
+    - name: 上传Bin到Artifacts (Upload bin to Artifacts）
       uses: actions/upload-artifact@main
       if: env.UPLOAD_BIN_ARTIFACTS == 'true' && env.Compile_Result == 'true' && !cancelled()
       with:
         name: ${{ env.CONFIG_FILE }}_bin_${{ env.Compile_Date }}
         path: openwrt/bin
 
-    - name: Upload Firmware to Release
+    - name: 上传固件到Release (Upload Firmware to Release）
       uses: svenstaro/upload-release-action@v2
       if: env.UPLOAD_RELEASES == 'true' && env.Compile_Result == 'true' && !cancelled()
       with:
@@ -256,7 +256,7 @@ jobs:
         tag: AutoUpdate
         overwrite: true
         
-    - name: Download Github API
+    - name: 下载Github API(Download Github API)
       if: env.UPLOAD_RELEASES == 'true' && env.Compile_Result == 'true' && !cancelled()
       run: |
         wget https://api.github.com/repos/${{github.repository}}/releases/tags/AutoUpdate -O API
@@ -271,9 +271,31 @@ jobs:
         tag: AutoUpdate
         overwrite: true
 
-    - name: Delete old Workflow Runs
-      uses: GitRML/delete-workflow-runs@main
+    #- name: Delete old Workflow Runs
+     #uses: GitRML/delete-workflow-runs@main
+      #if: env.DELETE_OLD_WORKFLOW == 'true' && !cancelled()
+      #with:
+       #retain_days: 1
+        #keep_minimum_runs: 3
+
+    - name: 删除旧的工作流 (Delete old Workflow Runs)
+      continue-on-error: true
       if: env.DELETE_OLD_WORKFLOW == 'true' && !cancelled()
+      uses: Mattraks/delete-workflow-runs@v2
       with:
-        retain_days: 1
-        keep_minimum_runs: 3
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: ${{ github.repository }}
+          retain_days: 3
+          keep_minimum_runs: 0
+          body: |
+
+            ### OpenWrt Image information
+            - Default IP: 192.168.5.1
+            - Default username: root
+            - Default password: password
+            - Default WIFI name: HiWiFi
+            - Default WIFI password: he1235678
+            ### Install to EMMC
+            - Login to OpenWrt → System → Amlogic Service → Install OpenWrt
+            ### OpenWrt Image Verification
+            - sha256sum
