@@ -214,10 +214,10 @@ jobs:
 
     - name: 克隆源代码(Clone Openwrt Source Code)
       run: |
-        git clone -b $REPO_URL openwrt
-        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
-        #git clone $REPO_URL openwrt  $REPO_BRANCH
+       # git clone -b $REPO_URL openwrt
         #ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
+        git clone $REPO_URL openwrt
+        ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         cd openwrt
         ./scripts/feeds update -a
         ./scripts/feeds install -a
