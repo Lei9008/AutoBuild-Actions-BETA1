@@ -26,10 +26,10 @@ on:
     inputs:
       Tempoary_CONFIG:
         description: '配置文件'
-        default: 'd-team_newifi-d2'
+        default: 'HiWiFi B70'
         type: choice
         options:
-          - 'd-team_newifi-d2'
+          - 'HiWiFi B70'
           - 'd-team_newifi-d2-Clash'
           - 'd-team_newifi-d2-Lite'
       Tempoary_FLAG:
@@ -62,9 +62,8 @@ on:
 ### 环境变量设置
 env:
 # 编译时调用的 [.config] 文件名称
-  CONFIG_FILE: d-team_newifi-d2
+  CONFIG_FILE: HiWiFi B70
 # 源码仓库:分支
-  #DEFAULT_SOURCE: coolsnowwolf/lede:master
   DEFAULT_SOURCE: Lei9008/openwrt-fros
   # DEFAULT_SOURCE: openwrt/openwrt:master
 # 删除无用文件以增加编译空间
