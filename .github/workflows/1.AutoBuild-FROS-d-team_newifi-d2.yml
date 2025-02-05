@@ -4,7 +4,7 @@
 #   Author: Hyy2001X                                      #
 ###########################################################
 
-name:  Test NeWiFi D2
+name:  FROS NeWiFi D2 23.05
 
 on:
   repository_dispatch:
