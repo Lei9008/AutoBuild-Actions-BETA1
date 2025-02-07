@@ -4,7 +4,7 @@
 #   Author: Hyy2001X                                      #
 ###########################################################
 
-name:  FROS NeWiFi D2 23.05
+name:  1.FROS NeWiFi D2 23.05
 
 on:
   repository_dispatch:
@@ -67,6 +67,7 @@ env:
   #DEFAULT_SOURCE: coolsnowwolf/lede:master
   DEFAULT_SOURCE: Lei9008/openwrt-fros
   # DEFAULT_SOURCE: openwrt/openwrt:master
+  FEEDS_CONF: feeds.conf.default
   DIY_P1_SH: diy-part1.sh
   DIY_P2_SH: diy-part2.sh
 # 删除无用文件以增加编译空间
