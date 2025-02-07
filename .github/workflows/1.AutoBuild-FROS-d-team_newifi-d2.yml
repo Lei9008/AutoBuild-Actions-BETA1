@@ -67,12 +67,15 @@ env:
   #DEFAULT_SOURCE: coolsnowwolf/lede:master
   DEFAULT_SOURCE: Lei9008/openwrt-fros
   # DEFAULT_SOURCE: openwrt/openwrt:master
+  DIY_P1_SH: diy-part1.sh
+  DIY_P2_SH: diy-part2.sh
 # 删除无用文件以增加编译空间
   DELETE_USELESS_FILES: true
 # 删除早期的 workflow 任务
   DELETE_OLD_WORKFLOW: true
 # Cache 加速编译
   CACHE_ACCELERATE: false
+  TZ: Asia/Shanghai
 ### 结束
 ### 请按需求修改以上内容
 
@@ -231,6 +234,32 @@ jobs:
         skip: true
         clean: true
         prefix: ${{ github.workspace }}/openwrt
+
+#######
+    - name: Load custom feeds
+      run: |
+        [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
+        chmod +x $DIY_P1_SH
+        cd openwrt
+        $GITHUB_WORKSPACE/$DIY_P1_SH
+
+    - name: Update feeds
+      run: cd openwrt && ./scripts/feeds update -a
+
+    - name: Install feeds
+      run: cd openwrt && ./scripts/feeds install -a
+
+    - name: Load custom configuration
+      run: |
+        [ -e files ] && mv files openwrt/files
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+        chmod +x $DIY_P2_SH
+        cd openwrt
+        $GITHUB_WORKSPACE/$DIY_P2_SH
+
+        ###########
+
+
 
     - name: 运行DIY (Run Diy Scripts)
       run: |
